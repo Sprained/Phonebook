@@ -29,15 +29,16 @@ module.exports = {
             return res.status(401).json({ error: 'Email ou Senha informado com erro!' });
         }
 
-        const { id, name } = user;
+        const { id_users, name } = user;
+        console.log()
 
         return res.json({
             user: {
-                id,
+                id_users,
                 name,
                 email
             },
-            token: jwt.sign({ id }, process.env.APP_SECRET)
+            token: jwt.sign({ id_users }, process.env.APP_SECRET)
         })
     }
 }
