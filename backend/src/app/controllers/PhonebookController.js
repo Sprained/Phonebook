@@ -5,6 +5,11 @@ const Yup = require('yup');
 const Phonebook = require('../models/Phonebook');
 
 module.exports = {
+    async index(req, res){
+        const book = await Phonebook.findAll({ where: { users_id: req.userId } })
+
+        return res.json(book);
+    },
     async store(req, res){
         const schema = Yup.object().shape({
             name: Yup.string().required(),
@@ -32,5 +37,11 @@ module.exports = {
         });
 
         return res.json({ message: 'Numero cadastrado com sucesso!' });
+    },
+    async delete(req, res){
+        const number = await Phonebook.findByPk(req.params.id);
+        number.destroy();
+
+        return res.json({ message: 'Numero apagado com sucesso!' });
     }
 }

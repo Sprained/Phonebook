@@ -16,6 +16,8 @@ routes.post('/session', SessionController.store);
 //middleware verifica se usuario ta logado
 routes.use(authMiddleware);
 
+routes.get('/phonebook', PhonebookController.index);
 routes.post('/phonebook', PhonebookController.store);
+routes.delete('/phonebook/:id', PhonebookController.delete);
 
 module.exports = routes;
