@@ -24,8 +24,14 @@ export const List = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+
+    label{
+        width: 45%;
+    }
 
     button{
+        width: 5%;
         background-color: transparent;
     }
 `
