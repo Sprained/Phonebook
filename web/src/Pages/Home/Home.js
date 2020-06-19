@@ -8,7 +8,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 
 import Api from '../../Services/Api';
 
-import { phoneMask } from '../../Utils/Maks';
+import { phoneMask, cleanMask } from '../../Utils/Maks';
 
 import {
     Container,
@@ -54,7 +54,9 @@ export default function Home(){
     }
 
     const newPhone = async (e) => {
-        const info = { name, phone };
+        const phoneClean = cleanMask(phone);
+        const info = { name, phone: phoneClean };
+        console.log(phoneClean);
 
         await Api.post('/phonebook', info);
 
@@ -102,7 +104,7 @@ export default function Home(){
                 phoneList.map(phone => 
                     <List>
                         <label>{phone.name}</label>
-                        <label>{phone.phone}</label>
+                        <label>{phoneMask(phone.phone)}</label>
                         <button
                             onClick={() => deletePhone(phone.id_phonebook)}
                         >

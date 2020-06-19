@@ -5,4 +5,9 @@ const phoneMask = value => {
     .replace(/(\d)(\d{4})$/,"$1-$2")  //Coloca hífen entre o quarto e o quinto dígito
 }
 
-export { phoneMask }
+const cleanMask = value => {
+    return value
+    .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
+}
+
+export { phoneMask, cleanMask }
