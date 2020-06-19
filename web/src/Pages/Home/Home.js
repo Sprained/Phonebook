@@ -8,6 +8,8 @@ import { FaWhatsapp } from 'react-icons/fa';
 
 import Api from '../../Services/Api';
 
+import { phoneMask } from '../../Utils/Maks';
+
 import {
     Container,
     List
@@ -67,6 +69,10 @@ export default function Home(){
         setContador(true);
     }
 
+    const wppNumber = async (phone) => {
+        window.open(`https://api.whatsapp.com/send?phone=55${phone}`);
+    }
+
     return(
         <Container>
             <Form schema={schema} onSubmit={newPhone}>
@@ -84,7 +90,8 @@ export default function Home(){
                     <Input
                         name="phone"
                         type="text"
-                        onChange={text => setPhone(text.target.value)}
+                        value={phone}
+                        onChange={text => setPhone(phoneMask(text.target.value))}
                     />
                 </div>
 
@@ -104,7 +111,9 @@ export default function Home(){
                                 color='#9932cc'
                             />
                         </button>
-                        <button>
+                        <button
+                            onClick={() => wppNumber(phone.phone)}
+                        >
                             <FaWhatsapp
                                 size={30}
                                 color='#9932cc'
