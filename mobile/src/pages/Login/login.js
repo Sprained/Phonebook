@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { TouchableOpacity, View, Text, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+import { TouchableOpacity, AsyncStorage } from 'react-native';
+
+import Api from '../../services/api';
 
 import {
     Container,
@@ -8,31 +12,74 @@ import {
     Label,
     Input,
     Button,
-    ButtonText,
+    ButtonText
+} from '../../global/global';
+
+import {
     ButtonCadastro
-} from './styles'
+} from './styles';
 
 export default function Login(){
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('');
+
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        userLogged();
+    });
+
+    const userLogged = async () =>{
+        const token =  await AsyncStorage.getItem('phone_token');
+
+        if(token){
+            Api.defaults.headers.authorization = `Bearer ${token}`;
+            navigation.navigate('home');
+        }
+    }
+
+    const handleLogin = async () => {
+        const info = { email, password };
+
+        try {
+            const response = await Api.post('/session', info);
+
+            Api.defaults.headers.authorization = `Bearer ${response.data.token}`;
+            
+            await AsyncStorage.setItem('phone_token', response.data.token);
+
+            navigation.navigate('home');
+        } catch (error) {
+            console.log(error);
+        }
+    } 
+
     return(
         <Container>
             <Form>
-                <View>
-                    <Label>Email</Label>
-                    <Input
-                    />
-                </View>
+                <Label>Email</Label>
+                <Input
+                    autoCapitalize='none'
+                    value={email}
+                    onChangeText={setEmail}
+                />
 
-                <View>
-                    <Label>Senha</Label>
-                    <Input
-                    />
-                </View>
+                <Label>Senha</Label>
+                <Input
+                    autoCapitalize='none'
+                    value={password} 
+                    onChangeText={setPassword}
+                />
 
-                <Button>
+                <Button
+                    onPress={() => handleLogin()}
+                >
                     <ButtonText>Login</ButtonText>
                 </Button>
                     
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('register')}
+                >
                     <ButtonCadastro>Não é cadastrado? Cadastre-se!</ButtonCadastro>
                 </TouchableOpacity>
             </Form>
